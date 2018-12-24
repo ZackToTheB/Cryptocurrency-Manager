@@ -9,7 +9,6 @@ class CryptoWindow:
     def __init__(self, master, db):
         self._master = master
         self._master.title("Crypto Manager - {0}".format(getTime(False)))
-        #self._master.iconbitmap(self, default = "icon_crypto.ico")
         self._master.resizable(False, False)
 
         self.__create_layout()
