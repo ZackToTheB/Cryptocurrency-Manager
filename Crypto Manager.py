@@ -156,6 +156,7 @@ class CryptoWindow:
         self.__cancel.grid(row = 1, column = 0)
         self.__confirm = tk.Button(self.__recordView, text = "Confirm", height = 2, width = 20, command = lambda:self.__record_view_close())
         self.__confirm.grid(row = 1, column = 1)
+        self.__recordView.bind("<Return>", lambda x:self.__record_view_close())
 
     def __unselect(self):
         self.__selectedLabel.config(text= " "*40)
@@ -181,6 +182,7 @@ class CryptoWindow:
                     flag = True
             if flag:
                 print("Error: Empty value(s)")
+                return
             else:
                 if self.__task == "edit":
                     sql = """UPDATE crypto_table SET """
@@ -247,6 +249,7 @@ class CryptoWindow:
         i_cancel.grid(row = 2, column = 0)
         i_confirm = tk.Button(self.__investedView, text = "Confirm", height = 2, width = 20, command = lambda:self.__invested_view_close())
         i_confirm.grid(row = 2, column = 1)
+        self.__investedView.bind("<Return>", lambda x:self.__invested_view_close())
 
     def __get_invested(self):
         self.__cursor.execute("SELECT invested FROM invested_table")
