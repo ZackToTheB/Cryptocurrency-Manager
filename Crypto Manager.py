@@ -15,6 +15,9 @@ class CryptoWindow:
         self.__create_items()
         self.__run_time()
 
+        self.__investedView = None
+        self.__recordView = None
+
         self.__cursor = db.cursor()
         self.__db = db
 
@@ -111,11 +114,15 @@ class CryptoWindow:
         #print(self.__selected)
         
     def __new_record(self):
+        if self.__recordView != None:
+            return
         self.__task = "new"
         self.__record_view("New Record")
 
     def __edit_record(self): #Fills record view for edit
         if self.__selected is not None:
+            if self.__recordView != None:
+                return
             self.__task = "edit"
             self.__cursor.execute("""SELECT * FROM crypto_table WHERE id='"""+str(self.__selected)+"""'""")
             data = self.__cursor.fetchone()
@@ -165,6 +172,7 @@ class CryptoWindow:
     def __record_view_close(self, cancel = False): #Closes record view
         if cancel:
             self.__recordView.destroy()
+            self.__recordView = None
         else:
             values = []
             for i in range(0, len(self.__inputs)):
@@ -203,7 +211,9 @@ class CryptoWindow:
                 self.__view_table()
                 
                 self._master.deiconify()
+                print(self.__recordView)
                 self.__recordView.destroy()
+                self.__recordView = None
         if self.__task == "new" or not cancel:
             self.__unselect()
 
@@ -232,6 +242,8 @@ class CryptoWindow:
         print("@ {} on {}\n-----".format(getTime(1)[1], getTime(0)))
 
     def __edit_invested(self):
+        if self.__investedView != None:
+            return
         self.__investedView = tk.Tk()
         self.__investedView.title("Edit Invested")
         self.__investedView.resizable(False, False)
@@ -258,6 +270,7 @@ class CryptoWindow:
     def __invested_view_close(self, cancel = False): #Closes record view
         if cancel:
             self.__investedView.destroy()
+            self.__investedView = None
         else:
             value = self.__invested_entry.get()
             #print(values)
@@ -275,6 +288,7 @@ class CryptoWindow:
                 self.__db.commit()
                 
                 self.__investedView.destroy()
+                self.__investedView = None
                 
 def round_(value, to = .5):
     if (value % to) >= (to / 2):
