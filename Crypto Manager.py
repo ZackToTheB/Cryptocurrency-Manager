@@ -211,7 +211,6 @@ class CryptoWindow:
                 self.__view_table()
                 
                 self._master.deiconify()
-                print(self.__recordView)
                 self.__recordView.destroy()
                 self.__recordView = None
         if self.__task == "new" or not cancel:
