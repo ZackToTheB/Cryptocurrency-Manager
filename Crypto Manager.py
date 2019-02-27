@@ -164,6 +164,7 @@ class CryptoWindow:
         self.__confirm = tk.Button(self.__recordView, text = "Confirm", height = 2, width = 20, command = lambda:self.__record_view_close())
         self.__confirm.grid(row = 1, column = 1)
         self.__recordView.bind("<Return>", lambda x:self.__record_view_close())
+        self.__recordView.bind("<Escape>", lambda x:self.__record_view_close(1))
 
     def __unselect(self):
         self.__selectedLabel.config(text= " "*40)
@@ -261,6 +262,7 @@ class CryptoWindow:
         i_confirm = tk.Button(self.__investedView, text = "Confirm", height = 2, width = 20, command = lambda:self.__invested_view_close())
         i_confirm.grid(row = 2, column = 1)
         self.__investedView.bind("<Return>", lambda x:self.__invested_view_close())
+        self.__investedView.bind("<Escape>", lambda x:self.__invested_view_close(1))
 
     def __get_invested(self):
         self.__cursor.execute("SELECT invested FROM invested_table")
