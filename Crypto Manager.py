@@ -11,6 +11,8 @@ class CryptoWindow:
         self._master.title("Crypto Manager - {0}".format(getTime(False)))
         self._master.resizable(False, False)
 
+        self._master.bind("v", lambda x:self.__get_valuation())
+
         self.__create_layout()
         self.__create_items()
         self.__run_time()
