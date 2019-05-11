@@ -249,10 +249,12 @@ class CryptoWindow:
         print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, isPos(total - invested), abs(total - invested), (total - invested)*100 / invested))
         print("@ {} on {}\n-----".format(getTime(1)[1], getTime(0)))
 
-        #colours = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
-        patches, texts = plt.pie(sizes, shadow=True, startangle=90)
+        plt.clf()
+        patches, texts, autotexts = plt.pie(sizes, startangle=90, autopct="%.1f", counterclock=False)
         plt.legend(patches, labels, loc="best")
         plt.axis("equal")
+        for text in autotexts:
+            text.set_text("{}%".format(text.get_text()))
         plt.tight_layout()
         plt.show()
 
