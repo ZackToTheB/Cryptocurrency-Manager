@@ -1,9 +1,12 @@
 import sqlite3 as sql
 import tkinter as tk
 from tkinter import ttk
-import time, threading
+import time
+import threading
 
+import matplotlib.pyplot as plt
 import CoinGeckoAPITest as GC_API
+
 
 class CryptoWindow:
     def __init__(self, master, db):
@@ -227,6 +230,7 @@ class CryptoWindow:
         self.__cursor.execute("""SELECT invested FROM invested_table""")
         invested = float(self.__cursor.fetchone()[0])
         total, totalR = 0, 0
+        labels, sizes = [], []
         for crypto in results:
             if crypto[2] > 0:
                 url = "https://api.coingecko.com/api/v3/coins/{}".format(crypto[0])
@@ -238,10 +242,19 @@ class CryptoWindow:
                 total += value
                 totalR += valueR
                 print("{0:>8} {1:^5} = £{2:<8.2f} >>  £{3:.2f}".format(crypto[2], crypto[1], value, valueR))
+                labels.append(crypto[1])
+                sizes.append(valueR)
             
         print("-----\nTotal Blockfolio Value: £{0:<7.2f} >>  £{1:.2f}".format(total, totalR))
         print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, isPos(total - invested), abs(total - invested), (total - invested)*100 / invested))
         print("@ {} on {}\n-----".format(getTime(1)[1], getTime(0)))
+
+        #colours = ['yellowgreen', 'gold', 'lightskyblue', 'lightcoral']
+        patches, texts = plt.pie(sizes, shadow=True, startangle=90)
+        plt.legend(patches, labels, loc="best")
+        plt.axis("equal")
+        plt.tight_layout()
+        plt.show()
 
     def __edit_invested(self):
         if self.__investedView != None:
