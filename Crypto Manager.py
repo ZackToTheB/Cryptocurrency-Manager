@@ -5,13 +5,13 @@ import time
 import threading
 
 import matplotlib.pyplot as plt
-import CoinGeckoAPITest as GC_API
+import CoinGeckoAPITest as gc
 
 
 class CryptoWindow:
     def __init__(self, master, db):
         self._master = master
-        self._master.title("Crypto Manager - {0}".format(getTime(False)))
+        self._master.title("Crypto Manager - {0}".format(get_time(False)))
         self._master.resizable(False, False)
 
         self._master.bind("v", lambda x:self.__get_valuation())
@@ -62,7 +62,7 @@ class CryptoWindow:
         try:
             self.__tick = threading.Timer(1.0, self.__run_time)
             self.__tick.start()
-            time = getTime()
+            time = get_time()
             self.__time_label["text"] = "{}".format(time[1])
             if self._master.title()[-10:] != time[0]:
                 self._master.title("Crypto Manager - {0}".format(time[0]))
@@ -234,7 +234,7 @@ class CryptoWindow:
         for crypto in results:
             if crypto[2] > 0:
                 url = "https://api.coingecko.com/api/v3/coins/{}".format(crypto[0])
-                data = GC_API.CoingeckoAPI(url).get_coingecko_data()["market_data"]
+                data = gc.CoingeckoAPI(url).get_coingecko_data()["market_data"]
                 price = data["current_price"][currency]
                 #print(price)
                 value = price*crypto[2]
@@ -246,8 +246,8 @@ class CryptoWindow:
                 sizes.append(valueR)
             
         print("-----\nTotal Blockfolio Value: £{0:<7.2f} >>  £{1:.2f}".format(total, totalR))
-        print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, isPos(total - invested), abs(total - invested), (total - invested)*100 / invested))
-        print("@ {} on {}\n-----".format(getTime(1)[1], getTime(0)))
+        print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, is_pos(total - invested), abs(total - invested), (total - invested)*100 / invested))
+        print("@ {} on {}\n-----".format(get_time(1)[1], get_time(0)))
 
         plt.clf()
         patches, texts, autotexts = plt.pie(sizes, startangle=90, autopct="%.1f", counterclock=False)
@@ -315,13 +315,13 @@ def round_(value, to = .5):
         rounded = value - (value % to)
     return rounded
 
-def isPos(value):
+def is_pos(value):
     if value < 0:
         return "-"
     else:
         return " "                   
         
-def getTime(time_ = True):
+def get_time(time_ = True):
     t = time.localtime()
     ts = [str(t[3]), str(t[4]), str(t[5]), str(t[2]), str(t[1]), str(t[0])]
     for i in range(5):
