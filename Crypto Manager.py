@@ -46,8 +46,6 @@ class CryptoWindow:
         self.__quit_button = tk.Button(self.__exit_frame, text = "QUIT", fg = "red", command = lambda:self.__close())
         self.__quit_button.grid(row = 0, column = 0, sticky = "w")
 
-        #self.__view_table_button = tk.Button(self.__button_frame, text = "View Table", height = 2, width = 15, command = lambda:self.__view_table())
-        #self.__view_table_button.grid(row = 0, column = 0, padx = 3, pady = 3)
         self.__valuation_button = tk.Button(self.__button_frame, text = "Valuation", height = 2, width = 15, command = lambda:self.__get_valuation())
         self.__valuation_button.grid(row = 0, column = 1, padx = 3, pady = 3)
         self.__edit_invested_button = tk.Button(self.__button_frame, text = "Edit Invested", height = 2, width = 15, command = lambda:self.__edit_invested())
@@ -116,7 +114,6 @@ class CryptoWindow:
         if len(selected) > 0:
             self.__selected = self.__tree.item(selected, "text")
             self.__selectedLabel.config(text= "   Selected id: {0}".format(self.__selected))
-        #print(self.__selected)
         
     def __new_record(self):
         if self.__recordView != None:
@@ -124,7 +121,7 @@ class CryptoWindow:
         self.__task = "new"
         self.__record_view("New Record")
 
-    def __edit_record(self): #Fills record view for edit
+    def __edit_record(self):
         if self.__selected is not None:
             if self.__recordView != None:
                 return
@@ -132,7 +129,6 @@ class CryptoWindow:
             self.__cursor.execute("""SELECT * FROM crypto_table WHERE id='"""+str(self.__selected)+"""'""")
             data = self.__cursor.fetchone()
             self.__record_view("Record: {0}".format(self.__selected))
-            #print(data)
             for i in range(0, len(data)):
                     self.__inputs[i].insert(0, data[i])
 
@@ -141,7 +137,7 @@ class CryptoWindow:
         self.__db.commit()
         self.__view_table()
 
-    def __record_view(self, title): #Record view for edit and new
+    def __record_view(self, title):
         self.__recordView = tk.Tk()
         self.__recordView.title(title)
         self.__recordView.resizable(False, False)
@@ -175,7 +171,7 @@ class CryptoWindow:
         self.__selectedLabel.config(text= " "*40)
         self.__selected = None
         
-    def __record_view_close(self, cancel = False): #Closes record view
+    def __record_view_close(self, cancel = False):
         if cancel:
             self.__recordView.destroy()
             self.__recordView = None
@@ -189,8 +185,7 @@ class CryptoWindow:
                 else:
                     newVal = self.__inputs[i].get()
                 values.append(newVal)
-            #print(values)
-            flag = False #Flags if any values are empty
+            flag = False 
             for value in values:
                 if "" == value:
                     flag = True
@@ -249,14 +244,17 @@ class CryptoWindow:
         print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, is_pos(total - invested), abs(total - invested), (total - invested)*100 / invested))
         print("@ {} on {}\n-----".format(get_time(1)[1], get_time(0)))
 
-        plt.clf()
-        patches, texts, autotexts = plt.pie(sizes, startangle=90, autopct="%.1f", counterclock=False)
-        plt.legend(patches, labels, loc="best")
-        plt.axis("equal")
-        for text in autotexts:
-            text.set_text("{}%".format(text.get_text()))
-        plt.tight_layout()
-        plt.show()
+        try:
+            plt.clf()
+            patches, texts, autotexts = plt.pie(sizes, startangle=90, autopct="%.1f", counterclock=False)
+            plt.legend(patches, labels, loc="best")
+            plt.axis("equal")
+            for text in autotexts:
+                text.set_text("{}%".format(text.get_text()))
+            plt.tight_layout()
+            plt.show()
+        except:
+            pass
 
     def __edit_invested(self):
         if self.__investedView != None:
@@ -291,8 +289,7 @@ class CryptoWindow:
             self.__investedView = None
         else:
             value = self.__invested_entry.get()
-            #print(values)
-            flag = False #Flags if any values are empty
+            flag = False 
             if "" == value:
                 flag = True
             if flag:
@@ -340,7 +337,6 @@ def get_time(time_ = True):
 def main():
     with sql.connect("data.db") as db:
         db_ = db
-        #cursor = db.cursor()
     
     root = tk.Tk()
     win = CryptoWindow(root, db_)
