@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import time, threading 
 
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import CoinGeckoAPITest as gc
 
 
