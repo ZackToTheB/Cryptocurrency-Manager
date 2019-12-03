@@ -4,7 +4,7 @@ from tkinter import ttk
 import time, threading 
 
 import matplotlib.pyplot as plt
-import CoinGeckoAPITest as gc
+import API as gc
 
 
 class CryptoWindow:
@@ -401,7 +401,7 @@ class CryptoWindow:
             else:
                 if value[0] == "+" or value[0] == "-":
                     value = self.__get_invested() + int(str(value[0:]))
-                sql = """UPDATE invested_table SET invested = '"""+str(value)+"""'"""
+                sql = """UPDATE invested_table SET invested = '{}' WHERE table_name = '{}'""".format(str(value), self.__table)
                 #print(sql)
                 self.__cursor.execute(sql)
                 self.__db.commit()
