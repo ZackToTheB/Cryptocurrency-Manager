@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 import time, threading 
 
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import CoinGeckoAPITest as gc
 
 
@@ -344,7 +344,8 @@ class CryptoWindow:
                 sizes.append(valueR)
             
         print("-----\nTotal Blockfolio Value: £{0:<7.2f} >>  £{1:.2f}".format(total, totalR))
-        print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, is_pos(total - invested), abs(total - invested), (total - invested)*100 / invested))
+        if invested != 0:
+            print("Total Investment Made:  £{0}, P/L: {1}£{2:.2f} ({3:.1f}%)".format(invested, is_pos(total - invested), abs(total - invested), (total - invested)*100 / invested))
         print("@ {} on {}\n-----".format(get_time(1)[1], get_time(0)))
 
         try:
