@@ -1,7 +1,8 @@
 import sqlite3 as sql
 import tkinter as tk
 from tkinter import ttk
-import time, threading 
+import threading
+import time
 
 import matplotlib.pyplot as plt
 import API as gc
@@ -12,7 +13,6 @@ class CryptoWindow:
         self._master = master
         self._master.title("Crypto Manager - {0}".format(get_time(False)))
         self._master.resizable(False, False)
-
         self._master.bind("v", lambda x:self.__get_valuation())
 
         self.__create_layout()
@@ -25,7 +25,6 @@ class CryptoWindow:
         self.__cursor = db.cursor()
         self.__db = db
         self.__table = "crypto_table"
-
         self.__view_table()
 
     def __create_layout(self):
@@ -334,7 +333,6 @@ class CryptoWindow:
                 url = "https://api.coingecko.com/api/v3/coins/{}".format(crypto[0])
                 data = gc.CoingeckoAPI(url).get_coingecko_data()["market_data"]
                 price = data["current_price"][currency]
-                #print(price)
                 value = price*crypto[2]
                 valueR = round_(value)
                 total += value
@@ -448,5 +446,4 @@ def main():
     win._master.mainloop()
 
 if __name__ == "__main__":
-
     main()
