@@ -221,25 +221,25 @@ class CryptoWindow:
         if self.__record_view != None:
             return
         self.__task = "new"
-        self.__record_view("New Record")
+        self.__show_record_view("New Record")
 
     def __edit_record(self):
         if self.__selected is not None:
             if self.__record_view != None:
                 return
             self.__task = "edit"
-            self.__cursor.execute("""SELECT * FROM crypto_table WHERE id='"""+str(self.__selected)+"""'""")
+            self.__cursor.execute("""SELECT * FROM {} WHERE id='{}'""".format(self.__table, str(self.__selected)))
             data = self.__cursor.fetchone()
-            self.__record_view("Record: {0}".format(self.__selected))
+            self.__show_record_view("Record: {0}".format(self.__selected))
             for i in range(0, len(data)):
                     self.__inputs[i].insert(0, data[i])
 
     def __remove_record(self):
-        self.__cursor.execute("""DELETE FROM crypto_table WHERE id='"""+str(self.__selected)+"""'""")
+        self.__cursor.execute("""DELETE FROM {} WHERE id='{}'""".format(self.__table, str(self.__selected)))
         self.__db.commit()
         self.__view_table()
 
-    def __record_view(self, title):
+    def __show_record_view(self, title):
         self.__record_view = tk.Tk()
         self.__record_view.title(title)
         self.__record_view.resizable(False, False)
@@ -296,21 +296,21 @@ class CryptoWindow:
                 return
             else:
                 if self.__task == "edit":
-                    sql = """UPDATE crypto_table SET """
+                    sql = """UPDATE {} SET """.format(self.__table)
                     for i in range(0, len(values)):
                         sql += self.__columns[i] + """ = '"""+str(values[i])+"""', """
                     sql = sql[:-2] + """ WHERE id='"""+str(self.__selected)+"""'"""
                 elif self.__task == "new":
-                    sql = """INSERT INTO crypto_table ("""
+                    sql = """INSERT INTO {} (""".format(self.__table)
                     for i in range(0, len(self.__columns)):
                         sql += self.__columns[i] +""", """
                     sql = sql[:-2] + """) VALUES ('"""
                     for i in range(0, len(self.__columns)):
                         sql += str(values[i])+"""', '"""
                     sql = sql[:-4] + """')"""
-                #print(sql)
                 self.__cursor.execute(sql)
                 self.__db.commit()
+                self.__table_label.destroy()
                 self.__view_table()
                 
                 self._master.deiconify()
