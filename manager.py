@@ -5,7 +5,7 @@ import threading
 import time
 
 import matplotlib.pyplot as plt
-import API as gc
+import api as gc
 
 
 class CryptoWindow:
