@@ -1,12 +1,10 @@
+import matplotlib.pyplot as plt
 import sqlite3 as sql
 import tkinter as tk
+import api as gc
 from tkinter import ttk
 import threading
 import time
-
-import matplotlib.pyplot as plt
-import api as gc
-
 
 class CryptoWindow:
     def __init__(self, master, db):
