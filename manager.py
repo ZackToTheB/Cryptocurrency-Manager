@@ -17,8 +17,8 @@ class CryptoWindow:
         self.__create_items()
         self.__run_time()
 
-        self.__invested_view = None
-        self.__record_view = None
+        self.__investedView = None
+        self.__recordView = None
 
         self.__cursor = db.cursor()
         self.__db = db
@@ -26,29 +26,29 @@ class CryptoWindow:
         self.__view_table()
 
     def __create_layout(self):
-        self.__time_frame = tk.Frame(self._master)
-        self.__button_frame = tk.Frame(self._master)
-        self.__widget_frame = tk.Frame(self._master)
-        self.__exit_frame = tk.Frame(self._master)
+        self.__timeFrame = tk.Frame(self._master)
+        self.__buttonFrame = tk.Frame(self._master)
+        self.__widgetFrame = tk.Frame(self._master)
+        self.__exitFrame = tk.Frame(self._master)
 
-        self.__time_frame.grid(row = 0, column = 0, columnspan = 1)#, sticky = "ew")
-        self.__button_frame.grid(row = 1, column = 0)
-        self.__widget_frame.grid(row = 2, column = 0)
-        self.__exit_frame.grid(row = 0, column = 0, sticky = "w")
+        self.__timeFrame.grid(row = 0, column = 0, columnspan = 1)
+        self.__buttonFrame.grid(row = 1, column = 0)
+        self.__widgetFrame.grid(row = 2, column = 0)
+        self.__exitFrame.grid(row = 0, column = 0, sticky = "w")
 
     def __create_items(self):
-        self.__time_label = tk.Label(self.__time_frame, text = "TIME", font = ("TkDefaultFont", 14))
-        self.__time_label.grid(row = 0, column = 0, columnspan = 2, sticky = "ew")
+        self.__timeLabel = tk.Label(self.__timeFrame, text = "TIME", font = ("TkDefaultFont", 14))
+        self.__timeLabel.grid(row = 0, column = 0, columnspan = 2, sticky = "ew")
 
-        self.__quit_button = tk.Button(self.__exit_frame, text = "QUIT", fg = "red", command = lambda:self.__close())
-        self.__quit_button.grid(row = 0, column = 0, sticky = "w")
+        self.__quitButton = tk.Button(self.__exitFrame, text = "QUIT", fg = "red", command = lambda:self.__close())
+        self.__quitButton.grid(row = 0, column = 0, sticky = "w")
 
-        self.__valuation_button = tk.Button(self.__button_frame, text = "Valuation", height = 2, width = 15, command = lambda:self.__get_valuation())
-        self.__valuation_button.grid(row = 0, column = 1, padx = 3, pady = 3)
-        self.__edit_invested_button = tk.Button(self.__button_frame, text = "Edit Invested", height = 2, width = 15, command = lambda:self.__edit_invested())
-        self.__edit_invested_button.grid(row = 0, column = 2, padx = 3, pady = 3)
-        self.__change_table_button = tk.Button(self.__button_frame, text = "Change Table", height = 2, width = 15, command = lambda:self.__change_table())
-        self.__change_table_button.grid(row = 0, column = 3, padx = 3, pady = 3)
+        self.__valuationButton = tk.Button(self.__buttonFrame, text = "Valuation", height = 2, width = 15, command = lambda:self.__get_valuation())
+        self.__valuationButton.grid(row = 0, column = 1, padx = 3, pady = 3)
+        self.__editInvestedButton = tk.Button(self.__buttonFrame, text = "Edit Invested", height = 2, width = 15, command = lambda:self.__edit_invested())
+        self.__editInvestedButton.grid(row = 0, column = 2, padx = 3, pady = 3)
+        self.__changeTableButton = tk.Button(self.__buttonFrame, text = "Change Table", height = 2, width = 15, command = lambda:self.__change_table())
+        self.__changeTableButton.grid(row = 0, column = 3, padx = 3, pady = 3)
 
     def __close(self):
         if self.__tick is not None:
@@ -60,7 +60,7 @@ class CryptoWindow:
             self.__tick = threading.Timer(1.0, self.__run_time)
             self.__tick.start()
             time = get_time()
-            self.__time_label["text"] = "{}".format(time[1])
+            self.__timeLabel["text"] = "{}".format(time[1])
             if self._master.title()[-10:] != time[0]:
                 self._master.title("Crypto Manager - {0}".format(time[0]))
         except Exception as e:
@@ -75,15 +75,14 @@ class CryptoWindow:
 
     def __view_table(self):
         self.__columns = ("id", "symbol", "holdings")
-        self.__tree = ttk.Treeview(self.__widget_frame, columns=self.__columns[1:])
+        self.__tree = ttk.Treeview(self.__widgetFrame, columns=self.__columns[1:])
         i = 0
         for column in self.__columns:
-            #print("C: {0}".format(column))
             self.__tree.heading("#{0}".format(i), text = column)
             self.__tree.column("#{0}".format(i), stretch=tk.NO)
             i += 1
         self.__tree.grid(row=2, columnspan=3, sticky="nsew")
-        self.__treeview = self.__tree
+        self.__treeView = self.__tree
         self.__tree.bind("<Double-1>", self.__select_item)
         self.__selected = None
         
@@ -96,63 +95,63 @@ class CryptoWindow:
                 temp.append(each[i])
             values = tuple(temp)
             if values[1] != 0 or 1:
-                self.__treeview.insert("", "end", text=each[0], values=values)
+                self.__treeView.insert("", "end", text=each[0], values=values)
 
-        self.__new_button = tk.Button(self.__widget_frame, text = "New Record", height = 3, width = 25, font = ("TkDefaultFont", 10), command = lambda:self.__new_record())
-        self.__edit_button = tk.Button(self.__widget_frame, text = "Edit Record", height = 3, width = 25, font = ("TkDefaultFont", 10), command = lambda:self.__edit_record())
-        self.__remove_button = tk.Button(self.__widget_frame, text = "Remove Record", height = 3, width = 25, font = ("TkDefaultFont", 10), command = lambda:self.__remove_record())
-        self.__selected_label = tk.Label(self.__widget_frame, text = " "*40)
-        self.__table_label = tk.Label(self.__widget_frame, text = self.__table)
+        self.__newButton = tk.Button(self.__widgetFrame, text = "New Record", height = 3, width = 25, font = ("TkDefaultFont", 10), command = lambda:self.__new_record())
+        self.__editButton = tk.Button(self.__widgetFrame, text = "Edit Record", height = 3, width = 25, font = ("TkDefaultFont", 10), command = lambda:self.__edit_record())
+        self.__removeButton = tk.Button(self.__widgetFrame, text = "Remove Record", height = 3, width = 25, font = ("TkDefaultFont", 10), command = lambda:self.__remove_record())
+        self.__selectedLabel = tk.Label(self.__widgetFrame, text = " "*40)
+        self.__tableLabel = tk.Label(self.__widgetFrame, text = self.__table)
         
-        self.__new_button.grid(row = 0, column = 0, pady = 1)
-        self.__edit_button.grid(row = 0, column = 1, pady = 1)
-        self.__remove_button.grid(row = 0, column = 2, pady = 1)
-        self.__selected_label.grid(row = 1, column = 2, sticky = "w", pady = 2)
-        self.__table_label.grid(row = 1, column = 0, sticky = "w", padx = 10)
+        self.__newButton.grid(row = 0, column = 0, pady = 1)
+        self.__editButton.grid(row = 0, column = 1, pady = 1)
+        self.__removeButton.grid(row = 0, column = 2, pady = 1)
+        self.__selectedLabel.grid(row = 1, column = 2, sticky = "w", pady = 2)
+        self.__tableLabel.grid(row = 1, column = 0, sticky = "w", padx = 10)
 
     def __select_item(self, e):
         selected = self.__tree.focus()
         if len(selected) > 0:
             self.__selected = self.__tree.item(selected, "text")
-            self.__selected_label.config(text= " "*40)
-            self.__selected_label.config(text= "   Selected id: {0}".format(self.__selected))
+            self.__selectedLabel.config(text= " "*40)
+            self.__selectedLabel.config(text= "   Selected id: {0}".format(self.__selected))
 
     def __new_table(self):
         self.__change_table_view_close(1)
         
-        self.__new_table_view = tk.Tk()
-        self.__new_table_view.title("New Table")
-        self.__new_table_view.resizable(False, False)
+        self.__newTableView = tk.Tk()
+        self.__newTableView.title("New Table")
+        self.__newTableView.resizable(False, False)
 
-        self.__label_frame = tk.Frame(self.__new_table_view)
-        self.__input_frame = tk.Frame(self.__new_table_view)
+        self.__labelFrame = tk.Frame(self.__newTableView)
+        self.__inputFrame = tk.Frame(self.__newTableView)
         
-        self.__label_frame.grid(row = 0, column = 0)
-        self.__input_frame.grid(row = 0, column = 1)
+        self.__labelFrame.grid(row = 0, column = 0)
+        self.__inputFrame.grid(row = 0, column = 1)
 
-        label = tk.Label(self.__label_frame, text = "Enter name:")
-        self.__new_table_entry = tk.Entry(self.__input_frame)
+        label = tk.Label(self.__labelFrame, text = "Enter name:")
+        self.__newTableEntry = tk.Entry(self.__inputFrame)
 
         label.grid(row = 0, column = 0, sticky = "e", pady = 1)
-        self.__new_table_entry.grid(row = 0, column = 1, sticky = "w", pady = 1)
+        self.__newTableEntry.grid(row = 0, column = 1, sticky = "w", pady = 1)
 
-        self.__cancel = tk.Button(self.__new_table_view, text = "Cancel", height = 2, width = 20, command = lambda:self.__new_table_close(True))
+        self.__cancel = tk.Button(self.__newTableView, text = "Cancel", height = 2, width = 20, command = lambda:self.__new_table_close(True))
         self.__cancel.grid(row = 1, column = 0)
-        self.__confirm = tk.Button(self.__new_table_view, text = "Confirm", height = 2, width = 20, command = lambda:self.__new_table_close())
+        self.__confirm = tk.Button(self.__newTableView, text = "Confirm", height = 2, width = 20, command = lambda:self.__new_table_close())
         self.__confirm.grid(row = 1, column = 1)
-        self.__new_table_view.bind("<Return>", lambda x:self.__new_table_close())
-        self.__new_table_view.bind("<Escape>", lambda x:self.__new_table_close(1))
+        self.__newTableView.bind("<Return>", lambda x:self.__new_table_close())
+        self.__newTableView.bind("<Escape>", lambda x:self.__new_table_close(1))
 
     def __new_table_close(self, cancel = False):
         if cancel:
-            self.__new_table_view.destroy()
-            self.__new_table_view = None
+            self.__newTableView.destroy()
+            self.__newTableView = None
             self.__change_table()
         else:
-            new_val = self.__new_table_entry.get().lower()
+            newVal = self.__newTableEntry.get().lower()
 
-            sql1 = """CREATE TABLE {} (id varchar, symbol varchar, holdings float)""".format(new_val)
-            sql2 = """INSERT INTO invested_table (table_name, invested)VALUES ({}, 0)""".format(new_val)
+            sql1 = """CREATE TABLE {} (id varchar, symbol varchar, holdings float)""".format(newVal)
+            sql2 = """INSERT INTO invested_table (table_name, invested)VALUES ({}, 0)""".format(newVal)
 
             self.__cursor.execute(sql)
             self.__cursor.execute(sql)
@@ -161,69 +160,66 @@ class CryptoWindow:
             self.__view_table()
                 
             self._master.deiconify()
-            self.__new_table_view.destroy()
-            self.__new_table_view = None
+            self.__newTableView.destroy()
+            self.__newTableView = None
 
     def __change_table(self):
-        self.__change_table_view = tk.Tk()
-        self.__change_table_view.title("Change Table")
-        self.__change_table_view.resizable(False, False)
+        self.__changeTableView = tk.Tk()
+        self.__changeTableView.title("Change Table")
+        self.__changeTableView.resizable(False, False)
 
-        self.__label_frame_c = tk.Frame(self.__change_table_view)
-        self.__input_frame_c = tk.Frame(self.__change_table_view)
+        self.__labelFrameC = tk.Frame(self.__changeTableView)
+        self.__inputFrameC = tk.Frame(self.__changeTableView)
         
-        self.__label_frame_c.grid(row = 0, column = 0)
-        self.__input_frame_c.grid(row = 0, column = 1)
-
-        self.__table_buttons = []
-        i = 0
+        self.__labelFrameC.grid(row = 0, column = 0)
+        self.__inputFrameC.grid(row = 0, column = 1)
 
         self.__cursor.execute("SELECT name FROM sqlite_master")
         results = self.__cursor.fetchall()
         self.__tables = []
         for result in results:
-            if result[0] not in ["sqlite_sequence", "invested_table", "sqlite_autoindex_crypto_table_full_1"] and "sqlite_autoindex" not in result[0]:
+            if result[0] not in ["sqlite_sequence", "invested_table"] and "sqlite_autoindex" not in result[0]:
                 self.__tables.append(result[0])
 
-        self.__change_table_var = tk.StringVar(self.__change_table_view)
-        self.__change_table_var.set(self.__table)
+        self.__changeTableVar = tk.StringVar(self.__changeTableView)
+        self.__changeTableVar.set(self.__table)
 
-        label = tk.Label(self.__label_frame_c, text = "Select table:").grid(row = 0, column = 0)
-        dropdown = tk.OptionMenu(self.__input_frame_c, self.__change_table_var, *self.__tables).grid(row = 0, column = 0)
+        label = tk.Label(self.__labelFrameC, text = "Select table:").grid(row = 0, column = 0)
+        dropdown = tk.OptionMenu(self.__inputFrameC, self.__changeTableVar, *self.__tables).grid(row = 0, column = 0)
 
-        self.__new_table_button = tk.Button(self.__change_table_view, text = "New Table", height = 1, width = 20, command = lambda:self.__new_table())
-        self.__new_table_button.grid(row = 1, column = 1)
-        self.__cancel = tk.Button(self.__change_table_view, text = "Cancel", height = 2, width = 20, command = lambda:self.__change_table_view_close(True))
+        self.__newTableButton = tk.Button(self.__changeTableView, text = "New Table", height = 1, width = 20, command = lambda:self.__new_table())
+        self.__newTableButton.grid(row = 1, column = 1)
+        self.__cancel = tk.Button(self.__changeTableView, text = "Cancel", height = 2, width = 20, command = lambda:self.__change_table_view_close(True))
         self.__cancel.grid(row = 2, column = 0)
-        self.__confirm = tk.Button(self.__change_table_view, text = "Confirm", height = 2, width = 20, command = lambda:self.__change_table_view_close())
+        self.__confirm = tk.Button(self.__changeTableView, text = "Confirm", height = 2, width = 20, command = lambda:self.__change_table_view_close())
         self.__confirm.grid(row = 2, column = 1)
-        self.__change_table_view.bind("<Return>", lambda x:self.__change_table_view_close())
-        self.__change_table_view.bind("<Escape>", lambda x:self.__change_table_view_close(1))
+        self.__changeTableView.bind("<Return>", lambda x:self.__change_table_view_close())
+        self.__changeTableView.bind("<Escape>", lambda x:self.__change_table_view_close(1))
         
     def __change_table_view_close(self, cancel = False):
         if cancel:
-            self.__change_table_view.destroy()
-            self.__change_table_view = None
+            self.__changeTableView.destroy()
+            self.__changeTableView = None
         else:
-            self.__table = self.__change_table_var.get()
-            self.__selected_label.destroy()
-            self.__table_label.destroy()
+            self.__table = self.__changeTableVar.get()
+            self.__selectedLabel.destroy()
+            self.__tableLabel.destroy()
             self.__view_table()
                 
             self._master.deiconify()
-            self.__change_table_view.destroy()
-            self.__change_table_view = None
+            self.__changeTableView.destroy()
+            self.__changeTableView = None
             
 
     def __new_record(self):
-        if self.__record_view != None:
+        if self.__recordView != None:
             return
         self.__task = "new"
         self.__show_record_view("New Record")
 
     def __edit_record(self):
         if self.__selected is not None:
-            if self.__record_view != None:
+            if self.__recordView != None:
                 return
             self.__task = "edit"
             self.__cursor.execute("""SELECT * FROM {} WHERE id='{}'""".format(self.__table, str(self.__selected)))
@@ -238,53 +234,53 @@ class CryptoWindow:
         self.__view_table()
 
     def __show_record_view(self, title):
-        self.__record_view = tk.Tk()
-        self.__record_view.title(title)
-        self.__record_view.resizable(False, False)
+        self.__recordView = tk.Tk()
+        self.__recordView.title(title)
+        self.__recordView.resizable(False, False)
 
-        self.__label_frame = tk.Frame(self.__record_view)
-        self.__input_frame = tk.Frame(self.__record_view)
+        self.__labelFrame = tk.Frame(self.__recordView)
+        self.__inputFrame = tk.Frame(self.__recordView)
         
-        self.__label_frame.grid(row = 0, column = 0)
-        self.__input_frame.grid(row = 0, column = 1)
+        self.__labelFrame.grid(row = 0, column = 0)
+        self.__inputFrame.grid(row = 0, column = 1)
 
         labels = []
         self.__inputs = []
         i = 0
         for column in self.__columns:
-            labels.append(tk.Label(self.__label_frame, text = "{0}:".format(column)))
-            self.__inputs.append(tk.Entry(self.__input_frame))
+            labels.append(tk.Label(self.__labelFrame, text = "{0}:".format(column)))
+            self.__inputs.append(tk.Entry(self.__inputFrame))
 
             labels[i].grid(row = i, column = 0, sticky = "e", pady = 1)
             self.__inputs[i].grid(row = i, column = 1, sticky = "w", pady = 1)
 
             i += 1
 
-        self.__cancel = tk.Button(self.__record_view, text = "Cancel", height = 2, width = 20, command = lambda:self.__record_view_close(True))
+        self.__cancel = tk.Button(self.__recordView, text = "Cancel", height = 2, width = 20, command = lambda:self.__record_view_close(True))
         self.__cancel.grid(row = 1, column = 0)
-        self.__confirm = tk.Button(self.__record_view, text = "Confirm", height = 2, width = 20, command = lambda:self.__record_view_close())
+        self.__confirm = tk.Button(self.__recordView, text = "Confirm", height = 2, width = 20, command = lambda:self.__record_view_close())
         self.__confirm.grid(row = 1, column = 1)
-        self.__record_view.bind("<Return>", lambda x:self.__record_view_close())
-        self.__record_view.bind("<Escape>", lambda x:self.__record_view_close(1))
+        self.__recordView.bind("<Return>", lambda x:self.__record_view_close())
+        self.__recordView.bind("<Escape>", lambda x:self.__record_view_close(1))
 
     def __unselect(self):
-        self.__selected_label.config(text= " "*40)
+        self.__selectedLabel.config(text= " "*40)
         self.__selected = None
         
     def __record_view_close(self, cancel = False):
         if cancel:
-            self.__record_view.destroy()
-            self.__record_view = None
+            self.__recordView.destroy()
+            self.__recordView = None
         else:
             values = []
             for i in range(0, len(self.__inputs)):
                 if i == 0:
-                    new_val = self.__inputs[i].get().lower()
+                    newVal = self.__inputs[i].get().lower()
                 elif i == 1:
-                    new_val = self.__inputs[i].get().upper()
+                    newVal = self.__inputs[i].get().upper()
                 else:
-                    new_val = self.__inputs[i].get()
-                values.append(new_val)
+                    newVal = self.__inputs[i].get()
+                values.append(newVal)
             flag = False 
             for value in values:
                 if "" == value:
@@ -308,12 +304,12 @@ class CryptoWindow:
                     sql = sql[:-4] + """')"""
                 self.__cursor.execute(sql)
                 self.__db.commit()
-                self.__table_label.destroy()
+                self.__tableLabel.destroy()
                 self.__view_table()
                 
                 self._master.deiconify()
-                self.__record_view.destroy()
-                self.__record_view = None
+                self.__recordView.destroy()
+                self.__recordView = None
         if self.__task == "new" or not cancel:
             self.__unselect()
 
@@ -357,27 +353,27 @@ class CryptoWindow:
             pass
 
     def __edit_invested(self):
-        if self.__invested_view != None:
+        if self.__investedView != None:
             return
-        self.__invested_view = tk.Tk()
-        self.__invested_view.title("Edit Invested")
-        self.__invested_view.resizable(False, False)
+        self.__investedView = tk.Tk()
+        self.__investedView.title("Edit Invested")
+        self.__investedView.resizable(False, False)
 
-        current_label = tk.Label(self.__invested_view, text = "Current:")
-        current_label.grid(row = 0, column = 0)
-        current_amount = tk.Label(self.__invested_view, text = self.__get_invested())
-        current_amount.grid(row = 0, column = 1)
-        invested_label = tk.Label(self.__invested_view, text = "Invested:")
-        invested_label.grid(row = 1, column = 0)
-        self.__invested_entry = tk.Entry(self.__invested_view)
-        self.__invested_entry.grid(row = 1, column = 1)
+        currentLabel = tk.Label(self.__investedView, text = "Current:")
+        currentLabel.grid(row = 0, column = 0)
+        currentAmount = tk.Label(self.__investedView, text = self.__get_invested())
+        currentAmount.grid(row = 0, column = 1)
+        investedLabel = tk.Label(self.__investedView, text = "Invested:")
+        investedLabel.grid(row = 1, column = 0)
+        self.__investedEntry = tk.Entry(self.__investedView)
+        self.__investedEntry.grid(row = 1, column = 1)
 
-        i_cancel = tk.Button(self.__invested_view, text = "Cancel", height = 2, width = 20, command = lambda:self.__invested_view_close(True))
-        i_cancel.grid(row = 2, column = 0)
-        i_confirm = tk.Button(self.__invested_view, text = "Confirm", height = 2, width = 20, command = lambda:self.__invested_view_close())
-        i_confirm.grid(row = 2, column = 1)
-        self.__invested_view.bind("<Return>", lambda x:self.__invested_view_close())
-        self.__invested_view.bind("<Escape>", lambda x:self.__invested_view_close(1))
+        cancelI = tk.Button(self.__investedView, text = "Cancel", height = 2, width = 20, command = lambda:self.__invested_view_close(True))
+        cancelI.grid(row = 2, column = 0)
+        confirmI = tk.Button(self.__investedView, text = "Confirm", height = 2, width = 20, command = lambda:self.__invested_view_close())
+        confirmI.grid(row = 2, column = 1)
+        self.__investedView.bind("<Return>", lambda x:self.__invested_view_close())
+        self.__investedView.bind("<Escape>", lambda x:self.__invested_view_close(1))
 
     def __get_invested(self):
         self.__cursor.execute("SELECT invested FROM invested_table WHERE table_name = '{}'".format(self.__table))
@@ -385,10 +381,10 @@ class CryptoWindow:
     
     def __invested_view_close(self, cancel = False): #Closes record view
         if cancel:
-            self.__invested_view.destroy()
-            self.__invested_view = None
+            self.__investedView.destroy()
+            self.__investedView = None
         else:
-            value = self.__invested_entry.get()
+            value = self.__investedEntry.get()
             flag = False 
             if "" == value:
                 flag = True
@@ -398,12 +394,11 @@ class CryptoWindow:
                 if value[0] == "+" or value[0] == "-":
                     value = self.__get_invested() + int(str(value[0:]))
                 sql = """UPDATE invested_table SET invested = '{}' WHERE table_name = '{}'""".format(str(value), self.__table)
-                #print(sql)
                 self.__cursor.execute(sql)
                 self.__db.commit()
                 
-                self.__invested_view.destroy()
-                self.__invested_view = None
+                self.__investedView.destroy()
+                self.__investedView = None
                 
 
 def round_(value, to = .5):
@@ -427,13 +422,13 @@ def get_time(time_ = True):
             new = "0"+str(ts[i])
             ts[i] = new
             
-    tstring = "{0}:{1}:{2}".format(ts[0], ts[1], ts[2])
-    dstring = "{0}/{1}/{2}".format(ts[3], ts[4], ts[5])
+    timeString = "{0}:{1}:{2}".format(ts[0], ts[1], ts[2])
+    dateString = "{0}/{1}/{2}".format(ts[3], ts[4], ts[5])
 
     if time_:
-        return dstring, tstring
+        return dateString, timeString
     else:
-        return dstring
+        return dateString
 
 def main():
     with sql.connect("data.db") as db:
